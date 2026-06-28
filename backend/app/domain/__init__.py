@@ -14,6 +14,13 @@ from app.domain.department import (
     DepartmentStatus,
 )
 from app.domain.employee import Employee, EmployeeStatus
+from app.domain.memory import (
+    CompanyMemory,
+    DepartmentMemory,
+    EmployeeMemory,
+    MemoryEntry,
+    MemoryImportance,
+)
 from app.domain.mission import Mission, MissionPriority, MissionStatus
 from app.domain.pipeline import Pipeline
 from app.domain.plan import Plan, PlanStatus, PlanStep
@@ -27,20 +34,25 @@ __all__ = [
     "BusinessStatus",
     "CEOStatus",
     "CompanyBlueprint",
+    "CompanyMemory",
     "Confidence",
     "Decision",
     "DecisionStatus",
     "Department",
     "DepartmentDefinition",
+    "DepartmentMemory",
     "DepartmentName",
     "DepartmentStatus",
     "Employee",
+    "EmployeeMemory",
     "EmployeeStatus",
     "PRIORITY_ORDER",
     "Plan",
     "PlanStatus",
     "PlanStep",
     "MIN_PLANNING_CONFIDENCE",
+    "MemoryEntry",
+    "MemoryImportance",
     "Mission",
     "MissionPriority",
     "MissionStatus",
