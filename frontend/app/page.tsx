@@ -1,3 +1,5 @@
+import { HeroSection } from "@/features/landing";
+
 export default function Page() {
-  return null;
+  return <HeroSection />;
 }
