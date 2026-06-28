@@ -25,11 +25,18 @@ from app.domain.mission import Mission, MissionPriority, MissionStatus
 from app.domain.pipeline import Pipeline
 from app.domain.plan import Plan, PlanStatus, PlanStep
 from app.domain.planner import MIN_PLANNING_CONFIDENCE, Planner
+from app.domain.runtime import (
+    AgentExecution,
+    ExecutionFailure,
+    ExecutionResult,
+    ExecutionStatus,
+)
 from app.domain.task import PRIORITY_ORDER, Task, TaskPriority, TaskStatus
 from app.domain.workflow import Workflow
 
 __all__ = [
     "AICEO",
+    "AgentExecution",
     "Assignment",
     "BusinessStatus",
     "CEOStatus",
@@ -46,6 +53,9 @@ __all__ = [
     "Employee",
     "EmployeeMemory",
     "EmployeeStatus",
+    "ExecutionFailure",
+    "ExecutionResult",
+    "ExecutionStatus",
     "PRIORITY_ORDER",
     "Plan",
     "PlanStatus",
