@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 
+import { DesignSystemProvider } from "@/components/providers";
 import "@/styles/globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Operator",
@@ -13,8 +21,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" className={inter.variable}>
+      <body className="bg-background-primary text-text-primary min-h-screen font-sans antialiased">
+        <DesignSystemProvider>{children}</DesignSystemProvider>
+      </body>
     </html>
   );
 }

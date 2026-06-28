@@ -1,0 +1,16 @@
+@theme {
+  --color-background-primary: #09090b;
+  --color-background-secondary: #111113;
+  --color-card: #18181b;
+  --color-border: #27272a;
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #a1a1aa;
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+
+  --color-ring: #2563eb;
+  --color-ring-offset: #09090b;
+}

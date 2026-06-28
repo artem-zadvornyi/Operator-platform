@@ -1,0 +1,7 @@
+@theme {
+  --width-container-sm: 640px;
+  --width-container-md: 768px;
+  --width-container-lg: 1024px;
+  --width-container-xl: 1280px;
+  --width-container-2xl: 1400px;
+}
