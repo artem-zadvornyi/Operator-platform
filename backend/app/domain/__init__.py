@@ -14,6 +14,15 @@ from app.domain.department import (
     DepartmentStatus,
 )
 from app.domain.employee import Employee, EmployeeStatus
+from app.domain.execution_strategy import (
+    DEPARTMENT_EXECUTION_PROFILES,
+    FUTURE_EXECUTION_STRATEGIES,
+    DeterministicExecutionStrategy,
+    ExecutionMode,
+    ExecutionPlan,
+    ExecutionStrategy,
+    FutureExecutionStrategyReference,
+)
 from app.domain.memory import (
     CompanyMemory,
     DepartmentMemory,
@@ -53,9 +62,16 @@ __all__ = [
     "Employee",
     "EmployeeMemory",
     "EmployeeStatus",
+    "DEPARTMENT_EXECUTION_PROFILES",
+    "DeterministicExecutionStrategy",
     "ExecutionFailure",
+    "ExecutionMode",
+    "ExecutionPlan",
     "ExecutionResult",
     "ExecutionStatus",
+    "ExecutionStrategy",
+    "FUTURE_EXECUTION_STRATEGIES",
+    "FutureExecutionStrategyReference",
     "PRIORITY_ORDER",
     "Plan",
     "PlanStatus",
