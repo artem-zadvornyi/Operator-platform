@@ -13,6 +13,7 @@ from app.domain.department import (
     DepartmentStatus,
 )
 from app.domain.employee import Employee, EmployeeStatus
+from app.domain.mission import Mission, MissionPriority, MissionStatus
 from app.domain.pipeline import Pipeline
 from app.domain.plan import Plan, PlanStatus, PlanStep
 from app.domain.planner import MIN_PLANNING_CONFIDENCE, Planner
@@ -37,6 +38,9 @@ __all__ = [
     "PlanStatus",
     "PlanStep",
     "MIN_PLANNING_CONFIDENCE",
+    "Mission",
+    "MissionPriority",
+    "MissionStatus",
     "Pipeline",
     "Planner",
     "RiskLevel",
