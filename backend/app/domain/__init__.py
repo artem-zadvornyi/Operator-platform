@@ -14,6 +14,7 @@ from app.domain.department import (
 )
 from app.domain.employee import Employee, EmployeeStatus
 from app.domain.plan import Plan, PlanStatus, PlanStep
+from app.domain.planner import MIN_PLANNING_CONFIDENCE, Planner
 from app.domain.task import PRIORITY_ORDER, Task, TaskPriority, TaskStatus
 from app.domain.workflow import Workflow
 
@@ -34,6 +35,8 @@ __all__ = [
     "Plan",
     "PlanStatus",
     "PlanStep",
+    "Planner",
+    "MIN_PLANNING_CONFIDENCE",
     "RiskLevel",
     "STANDARD_DEPARTMENT_DEFINITIONS",
     "STANDARD_DEPARTMENT_NAMES",
