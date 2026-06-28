@@ -2,6 +2,7 @@
 
 from app.domain.assignment import Assignment
 from app.domain.blueprint import CompanyBlueprint
+from app.domain.ceo import AICEO, CEOStatus, StrategyMode
 from app.domain.company import BusinessStatus
 from app.domain.decision import Confidence, Decision, DecisionStatus, RiskLevel
 from app.domain.department import (
@@ -21,8 +22,10 @@ from app.domain.task import PRIORITY_ORDER, Task, TaskPriority, TaskStatus
 from app.domain.workflow import Workflow
 
 __all__ = [
+    "AICEO",
     "Assignment",
     "BusinessStatus",
+    "CEOStatus",
     "CompanyBlueprint",
     "Confidence",
     "Decision",
@@ -46,6 +49,7 @@ __all__ = [
     "RiskLevel",
     "STANDARD_DEPARTMENT_DEFINITIONS",
     "STANDARD_DEPARTMENT_NAMES",
+    "StrategyMode",
     "Task",
     "TaskPriority",
     "TaskStatus",
