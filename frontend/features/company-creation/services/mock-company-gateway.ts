@@ -1,8 +1,11 @@
 "use client";
 
 import type { CompanyGateway } from "@/features/company-creation/services/company-gateway";
+import { toCompanyDashboardData } from "@/features/company-creation/services/company-dashboard-mapper";
+import { CompanyNotFoundError } from "@/features/company-creation/services/company-not-found-error";
 import type {
   CompanyCreationInput,
+  CompanyDashboardData,
   CompanyStatusResult,
   CreateCompanyResult,
   StartCompanyResult,
@@ -145,7 +148,7 @@ export class MockCompanyGateway implements CompanyGateway {
 
     const company = this.companies.get(companyId);
     if (!company) {
-      throw new Error("Company not found.");
+      throw new CompanyNotFoundError();
     }
 
     company.started = true;
@@ -169,7 +172,7 @@ export class MockCompanyGateway implements CompanyGateway {
 
     const company = this.companies.get(companyId);
     if (!company) {
-      throw new Error("Company not found.");
+      throw new CompanyNotFoundError();
     }
 
     return {
@@ -188,10 +191,32 @@ export class MockCompanyGateway implements CompanyGateway {
 
     const company = this.companies.get(companyId);
     if (!company) {
-      throw new Error("Company not found.");
+      throw new CompanyNotFoundError();
     }
 
     return company.workflow;
+  }
+
+  async getCompanyDashboard(companyId: string): Promise<CompanyDashboardData> {
+    await delay(300);
+
+    const company = this.companies.get(companyId);
+    if (!company) {
+      throw new CompanyNotFoundError();
+    }
+
+    return toCompanyDashboardData(
+      {
+        companyId: company.companyId,
+        missionId: company.missionId,
+        missionTitle: company.missionTitle,
+        missionDescription: company.missionDescription,
+        missionStatus: company.missionStatus,
+        ceo: company.ceo,
+        departments: company.departments,
+      },
+      company.workflow,
+    );
   }
 }
 

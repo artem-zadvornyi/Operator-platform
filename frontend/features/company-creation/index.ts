@@ -1,4 +1,5 @@
 export { CompanyCreationPage } from "./components/company-creation-page";
+export { CompanyDashboardPage } from "./components/company-dashboard-page";
 export type {
   CompanyCEO,
   CompanyCreationInput,

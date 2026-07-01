@@ -3,6 +3,7 @@
 import type { CompanyGateway } from "@/features/company-creation/services/company-gateway";
 import type {
   CompanyCreationInput,
+  CompanyDashboardData,
   CompanyStatusResult,
   CreateCompanyResult,
   StartCompanyResult,
@@ -22,6 +23,8 @@ export const companyGateway: CompanyGateway = createCompanyGateway();
 export type { CompanyGateway };
 export { ApiCompanyGateway, MockCompanyGateway, MOCK_FAILURE_IDEA };
 export { buildCreationEvents } from "./creation-events";
+export { CompanyNotFoundError, isCompanyNotFoundError } from "./company-not-found-error";
+export { toCompanyDashboardData } from "./company-dashboard-mapper";
 
 export async function createCompany(input: CompanyCreationInput): Promise<CreateCompanyResult> {
   return companyGateway.createCompany(input);
@@ -37,4 +40,8 @@ export async function getCompanyStatus(companyId: string): Promise<CompanyStatus
 
 export async function getWorkflowPreview(companyId: string): Promise<WorkflowPreview> {
   return companyGateway.getWorkflowPreview(companyId);
+}
+
+export async function getCompanyDashboard(companyId: string): Promise<CompanyDashboardData> {
+  return companyGateway.getCompanyDashboard(companyId);
 }

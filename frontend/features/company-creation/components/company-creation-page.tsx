@@ -11,11 +11,8 @@ import { motionTransitions, motionVariants, reducedMotionTransition } from "@/li
 
 import type { CreationPhase } from "../hooks/use-company-creation-flow";
 import { useCompanyCreationFlow } from "../hooks/use-company-creation-flow";
-import type { CompanyDashboardData } from "../types";
-import { CompanyDashboard } from "./company-dashboard";
 import { CreationErrorState } from "./creation-error-state";
 import { CreationSequence } from "./creation-sequence";
-import { CreationSuccessMessage } from "./creation-success-message";
 import { IdeaInputScreen } from "./idea-input-screen";
 
 interface PhaseContentProps {
@@ -26,7 +23,6 @@ interface PhaseContentProps {
   isAnimating: boolean;
   errorMessage: string | null;
   visibleEvents: ReturnType<typeof useCompanyCreationFlow>["visibleEvents"];
-  dashboardData: CompanyDashboardData | null;
   prefersReducedMotion: boolean;
   onIdeaChange: (value: string) => void;
   onSubmit: () => void;
@@ -41,7 +37,6 @@ function PhaseContent({
   isAnimating,
   errorMessage,
   visibleEvents,
-  dashboardData,
   prefersReducedMotion,
   onIdeaChange,
   onSubmit,
@@ -73,36 +68,6 @@ function PhaseContent({
           <p className="text-body text-text-secondary">Starting your company...</p>
         </div>
       );
-    case "success":
-      return (
-        <div className="flex min-h-[40vh] items-center justify-center py-16">
-          <CreationSuccessMessage prefersReducedMotion={prefersReducedMotion} />
-        </div>
-      );
-    case "dashboard":
-      if (!dashboardData) {
-        return (
-          <div
-            className="flex min-h-[40vh] flex-col items-center justify-center gap-4 py-16"
-            role="status"
-            aria-live="polite"
-          >
-            <Spinner size="lg" />
-            <p className="text-body text-text-secondary">Loading your company...</p>
-          </div>
-        );
-      }
-      return (
-        <div className="space-y-10">
-          <header className="space-y-2 text-center">
-            <p className="text-caption text-text-secondary tracking-wide uppercase">
-              Your company
-            </p>
-            <h1 className="text-h1 text-text-primary">{dashboardData.company.missionTitle}</h1>
-          </header>
-          <CompanyDashboard data={dashboardData} prefersReducedMotion={prefersReducedMotion} />
-        </div>
-      );
     case "error":
       return <CreationErrorState message={errorMessage} onRetry={onRetry} />;
     default: {
@@ -121,10 +86,6 @@ function getPhaseLayoutKey(phase: CreationPhase): string {
       return "building";
     case "finalizing":
       return "finalizing";
-    case "success":
-      return "success";
-    case "dashboard":
-      return "dashboard";
     case "error":
       return "error";
     default: {
@@ -161,7 +122,6 @@ export function CompanyCreationPage() {
     setIdea,
     errorMessage,
     visibleEvents,
-    dashboardData,
     isLoading,
     isAnimating,
     canSubmit,
@@ -172,12 +132,10 @@ export function CompanyCreationPage() {
 
   const transition = prefersReducedMotion ? reducedMotionTransition : motionTransitions.normal;
 
-  const isDashboard = phase === "dashboard";
   const isCenteredPhase =
     phase === "input" ||
     phase === "loading" ||
     phase === "finalizing" ||
-    phase === "success" ||
     phase === "error";
 
   const layoutKey = getPhaseLayoutKey(phase);
@@ -185,13 +143,8 @@ export function CompanyCreationPage() {
 
   return (
     <main className="min-h-screen py-20 sm:py-28">
-      <PageContainer size={isDashboard ? "lg" : "md"}>
-        <div
-          className={cn(
-            "relative w-full",
-            !isDashboard && "min-h-[calc(100dvh-10rem)]",
-          )}
-        >
+      <PageContainer size="md">
+        <div className="relative min-h-[calc(100dvh-10rem)] w-full">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={layoutKey}
@@ -200,15 +153,9 @@ export function CompanyCreationPage() {
               exit={motionVariants.fade.exit}
               transition={transition}
               className={cn(
-                "w-full",
-                isDashboard
-                  ? undefined
-                  : cn(
-                      "absolute inset-x-0 top-0",
-                      isCenteredPhase &&
-                        "flex min-h-[calc(100dvh-10rem)] items-center justify-center",
-                      phase === "building" && "py-8",
-                    ),
+                "absolute inset-x-0 top-0 w-full",
+                isCenteredPhase && "flex min-h-[calc(100dvh-10rem)] items-center justify-center",
+                phase === "building" && "py-8",
               )}
             >
               <PhaseContent
@@ -219,7 +166,6 @@ export function CompanyCreationPage() {
                 isAnimating={isAnimating}
                 errorMessage={errorMessage}
                 visibleEvents={visibleEvents}
-                dashboardData={dashboardData}
                 prefersReducedMotion={prefersReducedMotion}
                 onIdeaChange={setIdea}
                 onSubmit={() => {

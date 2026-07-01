@@ -1,8 +1,11 @@
 "use client";
 
 import type { CompanyGateway } from "@/features/company-creation/services/company-gateway";
+import { toCompanyDashboardData } from "@/features/company-creation/services/company-dashboard-mapper";
+import { CompanyNotFoundError } from "@/features/company-creation/services/company-not-found-error";
 import type {
   CompanyCreationInput,
+  CompanyDashboardData,
   CompanyStatusResult,
   CreateCompanyResult,
   StartCompanyResult,
@@ -36,6 +39,11 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
     } catch {
       // Keep default detail when error body is not JSON.
     }
+
+    if (response.status === 404) {
+      throw new CompanyNotFoundError(detail);
+    }
+
     throw new Error(detail);
   }
 
@@ -65,6 +73,11 @@ export class ApiCompanyGateway implements CompanyGateway {
   async getWorkflowPreview(companyId: string): Promise<WorkflowPreview> {
     const detail = await this.fetchCompanyDetail(companyId);
     return detail.workflow;
+  }
+
+  async getCompanyDashboard(companyId: string): Promise<CompanyDashboardData> {
+    const detail = await this.fetchCompanyDetail(companyId);
+    return toCompanyDashboardData(detail, detail.workflow);
   }
 
   private fetchCompanyDetail(companyId: string): Promise<CompanyDetailResponse> {

@@ -1,19 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import {
   ANIMATION_STEP_DELAY_MS,
   FINALIZE_DELAY_MS,
-  SUCCESS_MESSAGE_DELAY_MS,
 } from "@/features/company-creation/constants";
 import type { CompanyGateway } from "@/features/company-creation/services/company-gateway";
 import { companyGateway } from "@/features/company-creation/services";
-import type {
-  CompanyDashboardData,
-  CreateCompanyResult,
-  CreationEvent,
-} from "@/features/company-creation/types";
+import type { CreateCompanyResult, CreationEvent } from "@/features/company-creation/types";
 import { usePrefersReducedMotion } from "@/hooks";
 
 export type CreationPhase =
@@ -21,30 +17,26 @@ export type CreationPhase =
   | "loading"
   | "building"
   | "finalizing"
-  | "success"
-  | "dashboard"
   | "error";
 
 export function useCompanyCreationFlow(gateway: CompanyGateway = companyGateway) {
+  const router = useRouter();
   const prefersReducedMotion = usePrefersReducedMotion();
   const [phase, setPhase] = useState<CreationPhase>("input");
   const [idea, setIdea] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [createResult, setCreateResult] = useState<CreateCompanyResult | null>(null);
   const [visibleEventCount, setVisibleEventCount] = useState(0);
-  const [dashboardData, setDashboardData] = useState<CompanyDashboardData | null>(null);
   const finalizeStartedRef = useRef(false);
   const creatingRef = useRef(false);
   const flowGenerationRef = useRef(0);
 
   const isLoading = phase === "loading" || phase === "finalizing";
-  const isAnimating =
-    isLoading || phase === "building" || phase === "success";
+  const isAnimating = isLoading || phase === "building";
   const canSubmit = idea.trim().length > 0 && !isAnimating;
 
   const creationEvents: CreationEvent[] = createResult?.creationEvents ?? [];
   const stepDelay = prefersReducedMotion ? 0 : ANIMATION_STEP_DELAY_MS;
-  const successDelay = prefersReducedMotion ? 100 : SUCCESS_MESSAGE_DELAY_MS;
   const finalizeDelay = prefersReducedMotion ? 0 : FINALIZE_DELAY_MS;
 
   const resetFlow = useCallback(() => {
@@ -56,7 +48,6 @@ export function useCompanyCreationFlow(gateway: CompanyGateway = companyGateway)
     setErrorMessage(null);
     setCreateResult(null);
     setVisibleEventCount(0);
-    setDashboardData(null);
   }, []);
 
   const startCreation = useCallback(async () => {
@@ -71,7 +62,6 @@ export function useCompanyCreationFlow(gateway: CompanyGateway = companyGateway)
     setPhase("loading");
     setCreateResult(null);
     setVisibleEventCount(0);
-    setDashboardData(null);
     finalizeStartedRef.current = false;
 
     try {
@@ -135,28 +125,6 @@ export function useCompanyCreationFlow(gateway: CompanyGateway = companyGateway)
           return;
         }
 
-        const [status, workflowPreview] = await Promise.all([
-          gateway.getCompanyStatus(createResult.companyId),
-          gateway.getWorkflowPreview(createResult.companyId),
-        ]);
-
-        if (generation !== flowGenerationRef.current) {
-          return;
-        }
-
-        setDashboardData({
-          company: {
-            companyId: status.companyId,
-            missionId: status.missionId,
-            missionTitle: status.missionTitle,
-            missionDescription: status.missionDescription,
-            missionStatus: status.missionStatus,
-            ceo: status.ceo,
-            departments: status.departments,
-          },
-          workflowPreview,
-        });
-
         if (finalizeDelay > 0) {
           await new Promise<void>((resolve) => {
             window.setTimeout(resolve, finalizeDelay);
@@ -167,7 +135,7 @@ export function useCompanyCreationFlow(gateway: CompanyGateway = companyGateway)
           return;
         }
 
-        setPhase("success");
+        router.push(`/companies/${createResult.companyId}`);
       } catch (error) {
         if (generation !== flowGenerationRef.current) {
           return;
@@ -180,18 +148,7 @@ export function useCompanyCreationFlow(gateway: CompanyGateway = companyGateway)
     };
 
     void finalize();
-  }, [phase, createResult, gateway, finalizeDelay]);
-
-  useEffect(() => {
-    if (phase !== "success") {
-      return;
-    }
-
-    const timer = window.setTimeout(() => {
-      setPhase("dashboard");
-    }, successDelay);
-    return () => window.clearTimeout(timer);
-  }, [phase, successDelay]);
+  }, [phase, createResult, gateway, finalizeDelay, router]);
 
   return {
     phase,
@@ -200,7 +157,6 @@ export function useCompanyCreationFlow(gateway: CompanyGateway = companyGateway)
     errorMessage,
     creationEvents,
     visibleEvents: creationEvents.slice(0, visibleEventCount),
-    dashboardData,
     isLoading,
     isAnimating,
     canSubmit,

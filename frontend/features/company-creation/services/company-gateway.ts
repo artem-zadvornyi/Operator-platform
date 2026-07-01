@@ -1,5 +1,6 @@
 import type {
   CompanyCreationInput,
+  CompanyDashboardData,
   CompanyStatusResult,
   CreateCompanyResult,
   StartCompanyResult,
@@ -11,4 +12,5 @@ export interface CompanyGateway {
   startCompany(companyId: string): Promise<StartCompanyResult>;
   getCompanyStatus(companyId: string): Promise<CompanyStatusResult>;
   getWorkflowPreview(companyId: string): Promise<WorkflowPreview>;
+  getCompanyDashboard(companyId: string): Promise<CompanyDashboardData>;
 }
