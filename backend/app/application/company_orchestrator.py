@@ -11,9 +11,9 @@ from app.domain.ceo import CEOStatus
 from app.domain.mission import MissionPriority, MissionStatus
 from app.mappers.company_presenter import CompanyPresenter
 from app.mappers.idea_mapper import MOCK_FAILURE_IDEA, map_idea
+from app.repositories.company_repository import CompanyRepository
 from app.schemas.company import CompanyDetailResponse, CreateCompanyResponse, StartCompanyResponse
 from app.stores.company_session import CompanySession
-from app.stores.memory_company_store import MemoryCompanyStore
 
 
 class CompanyNotFoundError(Exception):
@@ -24,13 +24,13 @@ class CompanyNotFoundError(Exception):
 class CompanyOrchestrator:
     """Coordinates company creation and lifecycle for the HTTP API."""
 
-    store: MemoryCompanyStore
+    repository: CompanyRepository
     company_service: CompanyService = field(default_factory=CompanyService)
     mission_service: MissionService = field(default_factory=MissionService)
     execution_service: ExecutionService = field(default_factory=ExecutionService)
     presenter: CompanyPresenter = field(default_factory=CompanyPresenter)
 
-    def create_company(self, idea: str) -> CreateCompanyResponse:
+    async def create_company(self, idea: str) -> CreateCompanyResponse:
         trimmed = idea.strip()
         if not trimmed:
             msg = "Business idea is required."
@@ -86,27 +86,27 @@ class CompanyOrchestrator:
             started=False,
             created_at=now,
         )
-        self.store.save(session)
+        await self.repository.save(session)
         return self.presenter.to_create_response(session)
 
-    def start_company(self, company_id: UUID) -> StartCompanyResponse:
-        session = self._require_session(company_id)
+    async def start_company(self, company_id: UUID) -> StartCompanyResponse:
+        session = await self._require_session(company_id)
         if session.started:
             return StartCompanyResponse(companyId=str(company_id), status="started")
 
         now = datetime.now(UTC)
         session.ceo = session.ceo.with_status(CEOStatus.EXECUTING, now)
         session.started = True
-        self.store.save(session)
+        await self.repository.save(session)
 
         return StartCompanyResponse(companyId=str(company_id), status="started")
 
-    def get_company(self, company_id: UUID) -> CompanyDetailResponse:
-        session = self._require_session(company_id)
+    async def get_company(self, company_id: UUID) -> CompanyDetailResponse:
+        session = await self._require_session(company_id)
         return self.presenter.to_company_detail(session)
 
-    def _require_session(self, company_id: UUID) -> CompanySession:
-        session = self.store.get(company_id)
+    async def _require_session(self, company_id: UUID) -> CompanySession:
+        session = await self.repository.get(company_id)
         if session is None:
             msg = "Company not found."
             raise CompanyNotFoundError(msg)

@@ -3,19 +3,18 @@ from uuid import uuid4
 import pytest
 from fastapi.testclient import TestClient
 
-from app.api.deps import get_company_orchestrator, get_company_store
+from app.api.deps import get_company_orchestrator
 from app.application.company_orchestrator import CompanyOrchestrator
 from app.main import create_app
 from app.mappers.idea_mapper import MOCK_FAILURE_IDEA
-from app.stores.memory_company_store import MemoryCompanyStore
+from app.repositories.memory_company_repository import MemoryCompanyRepository
 
 
 @pytest.fixture
 def client() -> TestClient:
-    store = MemoryCompanyStore()
-    orchestrator = CompanyOrchestrator(store=store)
+    repository = MemoryCompanyRepository()
+    orchestrator = CompanyOrchestrator(repository=repository)
     application = create_app()
-    application.dependency_overrides[get_company_store] = lambda: store
     application.dependency_overrides[get_company_orchestrator] = lambda: orchestrator
 
     test_client = TestClient(application)

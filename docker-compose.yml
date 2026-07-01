@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: operator-postgres
+    environment:
+      POSTGRES_USER: operator
+      POSTGRES_PASSWORD: operator
+      POSTGRES_DB: operator
+    ports:
+      - "5432:5432"
+    volumes:
+      - operator_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U operator -d operator"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  operator_postgres_data:

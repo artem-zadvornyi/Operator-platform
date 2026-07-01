@@ -220,7 +220,6 @@ description = "Lightweight in-process concurrent programming"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
-markers = "platform_machine == \"aarch64\" or platform_machine == \"ppc64le\" or platform_machine == \"x86_64\" or platform_machine == \"amd64\" or platform_machine == \"AMD64\" or platform_machine == \"win32\" or platform_machine == \"WIN32\""
 files = [
     {file = "greenlet-3.5.3-cp310-cp310-macosx_11_0_universal2.whl", hash = "sha256:c180d22d325fb613956b443c3c6f4406eb70e6defc70d3974da2a7b59e06f48c"},
     {file = "greenlet-3.5.3-cp310-cp310-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:483d08c11181c83a6ce1a7a61df0f624a208ec40817a3bb2302714592eee4f04"},
@@ -1309,7 +1308,7 @@ files = [
 ]
 
 [package.dependencies]
-greenlet = {version = ">=1", markers = "platform_machine == \"aarch64\" or platform_machine == \"ppc64le\" or platform_machine == \"x86_64\" or platform_machine == \"amd64\" or platform_machine == \"AMD64\" or platform_machine == \"win32\" or platform_machine == \"WIN32\""}
+greenlet = {version = ">=1", optional = true, markers = "platform_machine == \"aarch64\" or platform_machine == \"ppc64le\" or platform_machine == \"x86_64\" or platform_machine == \"amd64\" or platform_machine == \"AMD64\" or platform_machine == \"win32\" or platform_machine == \"WIN32\" or extra == \"asyncio\""}
 typing-extensions = ">=4.6.0"
 
 [package.extras]
@@ -1667,4 +1666,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "d03893728a186bb5918088023f24db556531cb8a8bb1ca5035dbfea9708ad3e0"
+content-hash = "f7d57084999d14454ab954accf6d0be57cafe8bb2805cfe793a9890b59b9d800"

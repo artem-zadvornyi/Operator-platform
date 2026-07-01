@@ -6,11 +6,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.router import api_router
 from app.core.config import settings
-from app.db.session import dispose_database_engine
+from app.db.session import dispose_database_engine, require_async_database_runtime
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
+    require_async_database_runtime()
     yield
     dispose_database_engine()
 

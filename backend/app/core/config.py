@@ -1,5 +1,7 @@
+from typing import Annotated
+
 from pydantic import field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -15,7 +17,10 @@ class Settings(BaseSettings):
     host: str = "0.0.0.0"
     port: int = 8000
     database_url: str = "postgresql+asyncpg://operator:operator@localhost:5432/operator"
-    cors_origins: list[str] = [
+    cors_origins: Annotated[
+        list[str],
+        NoDecode,
+    ] = [
         "http://localhost:3000",
         "http://localhost:3002",
         "http://127.0.0.1:3000",
