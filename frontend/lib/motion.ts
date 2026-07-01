@@ -1,23 +1,25 @@
 import type { Transition, Variants } from "framer-motion";
 
-import { durations, easings } from "@/lib/theme";
+import { easings } from "@/lib/theme";
 
-const parseDuration = (value: string): number => {
-  const numeric = Number.parseFloat(value);
-  return value.endsWith("ms") ? numeric / 1000 : numeric;
-};
+// Seconds for Framer Motion (mirrors styles/tokens/animation.css).
+const motionDurations = {
+  fast: 0.15,
+  normal: 0.2,
+  slow: 0.3,
+} as const;
 
 export const motionTransitions = {
   fast: {
-    duration: parseDuration(durations.fast),
+    duration: motionDurations.fast,
     ease: [0.4, 0, 0.2, 1],
   },
   normal: {
-    duration: parseDuration(durations.normal),
+    duration: motionDurations.normal,
     ease: [0.4, 0, 0.2, 1],
   },
   slow: {
-    duration: parseDuration(durations.slow),
+    duration: motionDurations.slow,
     ease: [0.4, 0, 0.2, 1],
   },
   spring: {

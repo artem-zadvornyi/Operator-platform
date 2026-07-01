@@ -3,7 +3,13 @@ import { Crown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-export function CeoCard() {
+import type { CompanyCEO } from "../types";
+
+export interface CeoCardProps {
+  ceo: CompanyCEO;
+}
+
+export function CeoCard({ ceo }: CeoCardProps) {
   return (
     <Card className="border-accent/20">
       <CardHeader>
@@ -13,17 +19,15 @@ export function CeoCard() {
               <Crown className="size-5" aria-hidden />
             </div>
             <div>
-              <CardTitle>AI CEO</CardTitle>
+              <CardTitle>{ceo.name}</CardTitle>
               <CardDescription>Strategic leadership</CardDescription>
             </div>
           </div>
-          <Badge variant="outline">Planning</Badge>
+          <Badge variant="outline">{ceo.status}</Badge>
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-body text-text-secondary">
-          Mission analyzed. Departments assembled and ready to execute.
-        </p>
+        <p className="text-body text-text-secondary">{ceo.summary}</p>
       </CardContent>
     </Card>
   );

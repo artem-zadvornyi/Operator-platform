@@ -1,13 +1,15 @@
 "use client";
 
-import { type FormEvent } from "react";
+import { type FormEvent, useEffect, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 
 export interface IdeaInputScreenProps {
   idea: string;
   canSubmit: boolean;
+  isLoading: boolean;
   isAnimating: boolean;
   onIdeaChange: (value: string) => void;
   onSubmit: () => void;
@@ -16,10 +18,17 @@ export interface IdeaInputScreenProps {
 export function IdeaInputScreen({
   idea,
   canSubmit,
+  isLoading,
   isAnimating,
   onIdeaChange,
   onSubmit,
 }: IdeaInputScreenProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onSubmit();
@@ -35,20 +44,27 @@ export function IdeaInputScreen({
       <form
         onSubmit={handleSubmit}
         className="mt-14 flex w-full flex-col items-center gap-5"
-        aria-busy={isAnimating}
+        aria-busy={isLoading || isAnimating}
       >
         <Input
+          ref={inputRef}
           inputSize="lg"
           value={idea}
           onChange={(event) => onIdeaChange(event.target.value)}
           placeholder="Luxury TikTok Brand"
-          disabled={isAnimating}
+          disabled={isLoading || isAnimating}
           aria-label="Business idea"
           className="h-14 text-center text-body-large"
-          autoFocus
         />
-        <Button type="submit" size="lg" disabled={!canSubmit} className="min-w-44">
-          Create Company
+        <Button type="submit" size="lg" disabled={!canSubmit || isLoading} className="min-w-44">
+          {isLoading ? (
+            <>
+              <Spinner size="sm" />
+              Creating...
+            </>
+          ) : (
+            "Create Company"
+          )}
         </Button>
       </form>
     </div>

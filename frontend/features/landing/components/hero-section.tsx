@@ -36,10 +36,10 @@ export function HeroSection() {
 
               <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
                 <Button size="lg" asChild>
-                  <Link href="#start">Start building</Link>
+                  <Link href="/create">Start building</Link>
                 </Button>
                 <Button variant="secondary" size="lg" asChild>
-                  <Link href="#how-it-works">See how it works</Link>
+                  <Link href="/create">See how it works</Link>
                 </Button>
               </div>
 

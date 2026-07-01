@@ -4,14 +4,16 @@ import { motion } from "framer-motion";
 
 import { motionTransitions, motionVariants, reducedMotionTransition } from "@/lib/motion";
 
-import { DEPARTMENT_CARDS } from "../constants";
+import { getDepartmentIcon } from "../constants";
+import type { CompanyDepartment } from "../types";
 import { DepartmentCard } from "./department-card";
 
 export interface DepartmentsGridProps {
+  departments: CompanyDepartment[];
   prefersReducedMotion: boolean;
 }
 
-export function DepartmentsGrid({ prefersReducedMotion }: DepartmentsGridProps) {
+export function DepartmentsGrid({ departments, prefersReducedMotion }: DepartmentsGridProps) {
   const transition = prefersReducedMotion ? reducedMotionTransition : motionTransitions.normal;
 
   return (
@@ -20,7 +22,7 @@ export function DepartmentsGrid({ prefersReducedMotion }: DepartmentsGridProps) 
         Departments
       </h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {DEPARTMENT_CARDS.map((department, index) => (
+        {departments.map((department, index) => (
           <motion.div
             key={department.id}
             initial={motionVariants.slideUp.initial}
@@ -31,9 +33,8 @@ export function DepartmentsGrid({ prefersReducedMotion }: DepartmentsGridProps) 
             }}
           >
             <DepartmentCard
-              name={department.name}
-              status={department.status}
-              icon={department.icon}
+              department={department}
+              icon={getDepartmentIcon(department.id)}
             />
           </motion.div>
         ))}

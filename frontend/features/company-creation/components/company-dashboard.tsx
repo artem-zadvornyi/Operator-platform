@@ -4,17 +4,18 @@ import { motion } from "framer-motion";
 
 import { motionTransitions, motionVariants, reducedMotionTransition } from "@/lib/motion";
 
+import type { CompanyDashboardData } from "../types";
 import { CeoCard } from "./ceo-card";
 import { DepartmentsGrid } from "./departments-grid";
 import { MissionCard } from "./mission-card";
-import { WorkflowPreview } from "./workflow-preview";
+import { WorkflowPreviewCard } from "./workflow-preview";
 
 export interface CompanyDashboardProps {
-  idea: string;
+  data: CompanyDashboardData;
   prefersReducedMotion: boolean;
 }
 
-export function CompanyDashboard({ idea, prefersReducedMotion }: CompanyDashboardProps) {
+export function CompanyDashboard({ data, prefersReducedMotion }: CompanyDashboardProps) {
   const transition = prefersReducedMotion ? reducedMotionTransition : motionTransitions.slow;
 
   return (
@@ -25,13 +26,16 @@ export function CompanyDashboard({ idea, prefersReducedMotion }: CompanyDashboar
       className="space-y-12"
     >
       <div className="grid gap-5 lg:grid-cols-2">
-        <MissionCard idea={idea} />
-        <CeoCard />
+        <MissionCard company={data.company} />
+        <CeoCard ceo={data.company.ceo} />
       </div>
 
-      <DepartmentsGrid prefersReducedMotion={prefersReducedMotion} />
+      <DepartmentsGrid
+        departments={data.company.departments}
+        prefersReducedMotion={prefersReducedMotion}
+      />
 
-      <WorkflowPreview />
+      <WorkflowPreviewCard workflow={data.workflowPreview} />
     </motion.div>
   );
 }

@@ -4,16 +4,15 @@ import { motion } from "framer-motion";
 
 import { motionTransitions, motionVariants, reducedMotionTransition } from "@/lib/motion";
 
-import { CREATION_STEPS } from "../constants";
+import type { CreationEvent } from "../types";
 import { CreationStepItem } from "./creation-step-item";
 
 export interface CreationSequenceProps {
-  buildStep: number;
+  events: CreationEvent[];
   prefersReducedMotion: boolean;
 }
 
-export function CreationSequence({ buildStep, prefersReducedMotion }: CreationSequenceProps) {
-  const visibleSteps = CREATION_STEPS.slice(0, buildStep + 1);
+export function CreationSequence({ events, prefersReducedMotion }: CreationSequenceProps) {
   const transition = prefersReducedMotion ? reducedMotionTransition : motionTransitions.normal;
 
   return (
@@ -27,9 +26,9 @@ export function CreationSequence({ buildStep, prefersReducedMotion }: CreationSe
         Building your company
       </motion.p>
       <div className="flex flex-col gap-3" role="list" aria-live="polite" aria-relevant="additions">
-        {visibleSteps.map((step) => (
-          <div key={step.id} role="listitem">
-            <CreationStepItem step={step} prefersReducedMotion={prefersReducedMotion} />
+        {events.map((event) => (
+          <div key={event.id} role="listitem">
+            <CreationStepItem event={event} prefersReducedMotion={prefersReducedMotion} />
           </div>
         ))}
       </div>

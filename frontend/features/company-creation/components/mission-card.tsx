@@ -3,11 +3,13 @@ import { Target } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
+import type { CreatedCompany } from "../types";
+
 export interface MissionCardProps {
-  idea: string;
+  company: CreatedCompany;
 }
 
-export function MissionCard({ idea }: MissionCardProps) {
+export function MissionCard({ company }: MissionCardProps) {
   return (
     <Card>
       <CardHeader>
@@ -21,11 +23,12 @@ export function MissionCard({ idea }: MissionCardProps) {
               <CardDescription>Strategic objective</CardDescription>
             </div>
           </div>
-          <Badge variant="success">Active</Badge>
+          <Badge variant="success">{company.missionStatus}</Badge>
         </div>
       </CardHeader>
-      <CardContent>
-        <p className="text-body-large text-text-primary">{idea}</p>
+      <CardContent className="space-y-2">
+        <p className="text-body-large text-text-primary">{company.missionTitle}</p>
+        <p className="text-body text-text-secondary">{company.missionDescription}</p>
       </CardContent>
     </Card>
   );
