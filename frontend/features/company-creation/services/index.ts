@@ -9,12 +9,18 @@ import type {
   WorkflowPreview,
 } from "@/features/company-creation/types";
 
-import { MockCompanyGateway } from "./mock-company-gateway";
+import { ApiCompanyGateway } from "./api-company-gateway";
+import { MockCompanyGateway, MOCK_FAILURE_IDEA } from "./mock-company-gateway";
 
-export const companyGateway: CompanyGateway = new MockCompanyGateway();
+function createCompanyGateway(): CompanyGateway {
+  const useMock = process.env.NEXT_PUBLIC_USE_MOCK_GATEWAY !== "false";
+  return useMock ? new MockCompanyGateway() : new ApiCompanyGateway();
+}
+
+export const companyGateway: CompanyGateway = createCompanyGateway();
 
 export type { CompanyGateway };
-export { MockCompanyGateway, MOCK_FAILURE_IDEA } from "./mock-company-gateway";
+export { ApiCompanyGateway, MockCompanyGateway, MOCK_FAILURE_IDEA };
 export { buildCreationEvents } from "./creation-events";
 
 export async function createCompany(input: CompanyCreationInput): Promise<CreateCompanyResult> {
